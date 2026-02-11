@@ -718,7 +718,7 @@
 
                 <!-- Simulate Purchase Button -->
                 <button class="sim-btn purchase" onclick="simulatePurchase()">
-                    &#9749; Simulate a Purchase (£4.20)
+                    &#9749; Simulate a Purchase (€4.20)
                 </button>
 
                 <!-- Challenges -->
@@ -978,7 +978,7 @@ function renderMenu() {
                     <p>${item.desc}</p>
                 </div>
                 <div class="menu-item-right">
-                    <span class="menu-price">&pound;${item.price}</span>
+                    <span class="menu-price">&euro;${item.price}</span>
                     <button class="heart-btn" onclick="toggleFav(${i})">${isFav ? '&#10084;&#65039;' : '&#129293;'}</button>
                 </div>
             </div>
@@ -993,7 +993,7 @@ function toggleFav(idx) {
 }
 
 function simulatePurchase() {
-    const earned = 42; // £4.20 * 10 beans/£
+    const earned = 42; // €4.20 * 10 beans/€
     beanBalance += earned;
     purchaseCount++;
 

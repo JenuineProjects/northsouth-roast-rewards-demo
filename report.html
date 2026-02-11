@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NorthSouth Coffee — Final Executive Report | Agent 5: The Manager</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Source+Serif+4:wght@400;600;700&display=swap');
+
+  :root {
+    --bg: #0f1724;
+    --surface: #1a2640;
+    --surface-2: #1e2d4d;
+    --border: rgba(255,255,255,0.08);
+    --text: #e2e8f0;
+    --text-muted: #94a3b8;
+    --text-dim: #64748b;
+    --accent: #4a907a;
+    --accent-light: #6ee7b7;
+    --purple: #a78bfa;
+    --purple-dim: rgba(167,139,250,0.15);
+    --red: #f87171;
+    --red-dim: rgba(239,68,68,0.12);
+    --orange: #fb923c;
+    --rose: #fb7185;
+    --blue: #60a5fa;
+    --green: #4ade80;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  /* ── HERO ─── */
+  .hero {
+    background: linear-gradient(170deg, #0f1724 0%, #1a2640 50%, #1e2d4d 100%);
+    padding: 80px 0 60px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.02) 1px, transparent 0);
+    background-size: 40px 40px;
+  }
+  .hero-content { position: relative; z-index: 1; }
+  .hero-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--purple);
+    margin-bottom: 16px;
+  }
+  .hero h1 {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 42px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  .hero h2 {
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--text-muted);
+    margin-bottom: 28px;
+  }
+  .hero-meta {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    flex-wrap: wrap;
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+  .hero-meta span { display: flex; align-items: center; gap: 6px; }
+  .hero-meta strong { color: var(--text-muted); font-weight: 600; }
+
+  /* ── LAYOUT ─── */
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* ── SECTIONS ─── */
+  section {
+    padding: 48px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  section:last-of-type { border-bottom: none; }
+
+  h2.section-title {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--accent);
+    display: inline-block;
+  }
+
+  h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    margin: 28px 0 12px;
+  }
+
+  h4 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--accent-light);
+    margin: 20px 0 8px;
+  }
+
+  p { margin-bottom: 14px; color: var(--text); }
+
+  strong { color: #fff; font-weight: 600; }
+
+  ul, ol {
+    margin: 10px 0 14px 24px;
+    color: var(--text);
+  }
+  li { margin-bottom: 6px; }
+
+  /* ── TABLES ─── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0 24px;
+    font-size: 13.5px;
+  }
+  thead th {
+    background: var(--surface-2);
+    color: var(--accent-light);
+    font-weight: 700;
+    text-align: left;
+    padding: 10px 14px;
+    border-bottom: 2px solid var(--accent);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  tbody td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    vertical-align: top;
+  }
+  tbody tr:hover { background: rgba(74,144,122,0.05); }
+  tbody td:first-child { font-weight: 500; }
+
+  /* ── CALLOUT BOXES ─── */
+  .callout {
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin: 20px 0;
+  }
+  .callout-red {
+    background: var(--red-dim);
+    border: 1px solid rgba(239,68,68,0.3);
+  }
+  .callout-red .callout-label { color: var(--red); }
+  .callout-green {
+    background: rgba(16,185,129,0.1);
+    border: 1px solid rgba(52,211,153,0.3);
+  }
+  .callout-green .callout-label { color: var(--accent-light); }
+  .callout-purple {
+    background: var(--purple-dim);
+    border: 1px solid rgba(167,139,250,0.3);
+  }
+  .callout-purple .callout-label { color: var(--purple); }
+  .callout-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  /* ── SCORE CARDS ─── */
+  .agent-review {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px;
+    margin: 20px 0;
+  }
+  .agent-review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  .agent-review-header h3 { margin: 0; }
+  .score-pill {
+    font-size: 20px;
+    font-weight: 900;
+    padding: 6px 18px;
+    border-radius: 10px;
+  }
+  .score-orange { background: rgba(234,88,12,0.2); color: var(--orange); border: 1px solid rgba(251,146,60,0.3); }
+  .score-rose { background: rgba(225,29,72,0.2); color: var(--rose); border: 1px solid rgba(251,113,133,0.3); }
+  .score-blue { background: rgba(37,99,235,0.2); color: var(--blue); border: 1px solid rgba(96,165,250,0.3); }
+  .score-green { background: rgba(22,163,74,0.2); color: var(--green); border: 1px solid rgba(74,222,128,0.3); }
+
+  /* ── PIPELINE DIAGRAM ─── */
+  .pipeline-diagram {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px;
+    margin: 20px 0;
+    overflow-x: auto;
+    font-family: 'Courier New', monospace;
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: var(--text-muted);
+    white-space: pre;
+  }
+
+  /* ── RECOMMENDATION CARDS ─── */
+  .reco-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 12px;
+    padding: 24px;
+    margin: 20px 0;
+  }
+  .reco-card h3 { margin-top: 0; color: var(--accent-light); }
+
+  /* ── METRICS ROW ─── */
+  .metrics-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+  }
+  .metric-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+  }
+  .metric-value {
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--accent-light);
+    line-height: 1;
+  }
+  .metric-label {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-top: 6px;
+    font-weight: 500;
+  }
+
+  /* ── FOOTER ─── */
+  .footer {
+    text-align: center;
+    padding: 40px 24px;
+    border-top: 1px solid var(--border);
+    color: var(--text-dim);
+    font-size: 13px;
+  }
+  .footer a { color: var(--accent); text-decoration: none; }
+  .footer a:hover { text-decoration: underline; }
+
+  /* ── NAV ─── */
+  .sticky-nav {
+    position: sticky;
+    top: 0;
+    background: rgba(15,23,36,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    z-index: 100;
+    padding: 12px 24px;
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .sticky-nav a {
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transition: color 0.2s;
+  }
+  .sticky-nav a:hover { color: var(--accent-light); }
+
+  /* ── RESPONSIVE ─── */
+  @media (max-width: 640px) {
+    .hero h1 { font-size: 28px; }
+    .hero-meta { flex-direction: column; align-items: center; gap: 8px; }
+    .metrics-row { grid-template-columns: repeat(2, 1fr); }
+    .agent-review-header { flex-direction: column; gap: 8px; align-items: flex-start; }
+    table { font-size: 12px; }
+    thead th, tbody td { padding: 8px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-content">
+    <div class="hero-label">Agent 5 &mdash; The Manager: Final Executive Report</div>
+    <h1>NorthSouth Coffee<br>Loyalty Programme Redesign</h1>
+    <h2>Pipeline Synthesis &amp; Recommendations</h2>
+    <div class="hero-meta">
+      <span><strong>Prepared for:</strong> CEO &amp; Board of Directors</span>
+      <span><strong>Date:</strong> 10 February 2026</span>
+      <span><strong>Classification:</strong> Board Level</span>
+      <span><strong>Programme:</strong> NorthSouth Roast Rewards</span>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="sticky-nav">
+  <a href="#executive-summary">Executive Summary</a>
+  <a href="#agent-reviews">Agent Reviews</a>
+  <a href="#solution">Solution Overview</a>
+  <a href="#risks">Risk Assessment</a>
+  <a href="#resources">Resources</a>
+  <a href="#governance">Governance</a>
+  <a href="#recommendations">Recommendations</a>
+  <a href="#next-steps">Next Steps</a>
+</nav>
+
+<div class="container">
+
+  <!-- 1. EXECUTIVE SUMMARY -->
+  <section id="executive-summary">
+    <h2 class="section-title">1. Executive Summary</h2>
+
+    <div class="callout callout-red">
+      <div class="callout-label">The Problem</div>
+      <p style="margin-bottom:0;">NorthSouth Coffee's loyalty programme is in crisis. Monthly active users have fallen <strong>40% in six months</strong> (from 80,000 to 48,000), reward redemption sits at <strong>12%</strong> against an industry average of 35%, and the programme's Net Promoter Score of <strong>-12</strong> means customers are actively warning others away. The root cause: customers sign up, redeem a free welcome drink, and then encounter a <strong>"Points Desert"</strong> &mdash; a barren stretch of low-value interactions with no short-term rewards, no personalisation, and no reason to return.</p>
+    </div>
+
+    <p>This report synthesises the work of a four-agent pipeline that has diagnosed the problem, designed the solution, built the technical implementation, and created the launch strategy. The result is <strong>"NorthSouth Roast Rewards"</strong> &mdash; a comprehensive programme redesign that replaces the Points Desert with:</p>
+
+    <ul>
+      <li>A <strong>Milestone Ladder</strong> delivering rewards at 3, 5, 8, 12, and 20 visits</li>
+      <li><strong>Smart Lifecycle Messaging</strong> that sends the right message at the right time</li>
+      <li>A <strong>"Second Cup" Onboarding Journey</strong> with Triple Points to drive second visits within 14 days</li>
+      <li><strong>Gamification</strong>: Weekly Challenges, Visit Streaks with Streak Shields, and random Surprise &amp; Delight Drops</li>
+      <li><strong>App Utility</strong>: personalised home screen, store finder, and digital menu</li>
+    </ul>
+
+    <div class="metrics-row">
+      <div class="metric-card">
+        <div class="metric-value">&euro;250K</div>
+        <div class="metric-label">Total Investment</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">3.56:1</div>
+        <div class="metric-label">Projected ROI</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">8 Wks</div>
+        <div class="metric-label">To Full Launch</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">120</div>
+        <div class="metric-label">Locations</div>
+      </div>
+    </div>
+
+    <h3>Expected Outcomes (6 months post-launch)</h3>
+    <table>
+      <thead><tr><th>Metric</th><th>Current</th><th>Target</th><th>Confidence</th></tr></thead>
+      <tbody>
+        <tr><td>Monthly Active Users</td><td>48,000</td><td>80,000+</td><td>High</td></tr>
+        <tr><td>Reward Redemption Rate</td><td>12%</td><td>32%</td><td>High</td></tr>
+        <tr><td>90-Day App Uninstall Rate</td><td>58%</td><td>22%</td><td>Medium-High</td></tr>
+        <tr><td>Net Promoter Score</td><td>-12</td><td>+22</td><td>Medium</td></tr>
+        <tr><td>Transactions per MAU/Month</td><td>2.1</td><td>3.5</td><td>Medium-High</td></tr>
+        <tr><td>Push Notification Open Rate</td><td>4%</td><td>15%</td><td>High</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout-green">
+      <div class="callout-label">Recommendation</div>
+      <p style="margin-bottom:0;"><strong>Approve the programme and begin execution immediately.</strong> Every week of delay costs approximately &euro;66,000 in lost incremental revenue.</p>
+    </div>
+  </section>
+
+  <!-- 2. AGENT REVIEWS -->
+  <section id="agent-reviews">
+    <h2 class="section-title">2. Agent Performance Review</h2>
+
+    <!-- Agent 1 -->
+    <div class="agent-review">
+      <div class="agent-review-header">
+        <h3>Agent 1 &mdash; The Researcher (As-Is Analysis)</h3>
+        <span class="score-pill score-orange">7.5 / 10</span>
+      </div>
+      <table>
+        <thead><tr><th>Dimension</th><th>Score</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Overall</strong></td><td><strong>7.5/10</strong></td><td>Solid diagnostic work, sound problem identification</td></tr>
+          <tr><td>Completeness</td><td>7/10</td><td>All sections covered; gaps in segmentation and financial modelling</td></tr>
+          <tr><td>Quality</td><td>8/10</td><td>Sharp framing ("Welcome Offer Cliff"), strong competitive analysis</td></tr>
+          <tr><td>Alignment</td><td>8/10</td><td>Directly addresses business objectives</td></tr>
+          <tr><td>Handoff</td><td>7/10</td><td>Good but required Manager to add guardrails for the Designer</td></tr>
+        </tbody>
+      </table>
+      <h4>Strengths</h4>
+      <ol>
+        <li>The "Welcome Offer Cliff" framing gave the entire pipeline a clear target to solve</li>
+        <li>Structured use of Hook Model, BJ Fogg, JTBD, 5 Whys, and Ishikawa frameworks</li>
+        <li>Competitive analysis of 5 direct competitors with specific feature gaps</li>
+      </ol>
+      <h4>Gaps</h4>
+      <ul>
+        <li>No customer segmentation (who should we prioritise?)</li>
+        <li>No financial modelling (what can we afford?)</li>
+        <li>No technical feasibility assessment (what's possible in 8 weeks?)</li>
+      </ul>
+      <p><strong>How Well It Connected:</strong> The Researcher set the foundation. The gaps required the Manager to impose guardrails (personas, cost caps, technical constraints) before the Designer could proceed.</p>
+    </div>
+
+    <!-- Agent 2 -->
+    <div class="agent-review">
+      <div class="agent-review-header">
+        <h3>Agent 2 &mdash; The Designer (To-Be Vision)</h3>
+        <span class="score-pill score-rose">9.0 / 10</span>
+      </div>
+      <table>
+        <thead><tr><th>Dimension</th><th>Score</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Overall</strong></td><td><strong>9.0/10</strong></td><td>Exceptional solution design grounded in behavioural science</td></tr>
+          <tr><td>Completeness</td><td>9/10</td><td>All 8 sections fully addressed</td></tr>
+          <tr><td>Quality</td><td>9.5/10</td><td>Creative, specific, backed by 14 cited behavioural principles</td></tr>
+          <tr><td>Alignment</td><td>9/10</td><td>Within all constraints; cost modelling well under cap</td></tr>
+          <tr><td>Handoff</td><td>9/10</td><td>Detailed technical requirements gave the Coder a clear blueprint</td></tr>
+        </tbody>
+      </table>
+      <h4>Strengths</h4>
+      <ol>
+        <li>The Milestone Ladder is a masterclass in behavioural design &mdash; rewards at 3, 5, 8, 12, 20 visits directly kills the Points Desert</li>
+        <li>Cost modelling shows &euro;0.85/month per MAU against a &euro;2.50 cap &mdash; substantial financial headroom</li>
+        <li>14 behavioural science principles cited with original academic references</li>
+      </ol>
+      <p><strong>How Well It Connected:</strong> Outstanding bridge between Researcher and Coder. Every root cause got a specific, buildable solution.</p>
+    </div>
+
+    <!-- Agent 3 -->
+    <div class="agent-review">
+      <div class="agent-review-header">
+        <h3>Agent 3 &mdash; The Coder (Implementation)</h3>
+        <span class="score-pill score-blue">9.5 / 10</span>
+      </div>
+      <table>
+        <thead><tr><th>Dimension</th><th>Score</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Overall</strong></td><td><strong>9.5/10</strong></td><td>Production-quality technical specification</td></tr>
+          <tr><td>Completeness</td><td>10/10</td><td>All Designer requirements fully implemented</td></tr>
+          <tr><td>Quality</td><td>9.5/10</td><td>Clean code, proper architecture, GDPR-compliant by design</td></tr>
+          <tr><td>Alignment</td><td>9/10</td><td>&euro;1,200/month infrastructure well within budget</td></tr>
+          <tr><td>Handoff</td><td>9/10</td><td>Deployment timeline gives Communicator clear rollout windows</td></tr>
+        </tbody>
+      </table>
+      <h4>Strengths</h4>
+      <ol>
+        <li>Complete SQL schema for 15+ tables with indexes, constraints, seed data, and GDPR compliance fields</li>
+        <li>7 production Python services with type hints, docstrings, and unit test examples</li>
+        <li>Feature flag system with gradual rollout (0%&rarr;5%&rarr;25%&rarr;50%&rarr;100%) and sub-5-minute rollback</li>
+      </ol>
+      <p><strong>How Well It Connected:</strong> The Coder faithfully translated every Designer requirement into buildable specifications. The feature flag system adds operational safety that the Designer hadn't specified.</p>
+    </div>
+
+    <!-- Agent 4 -->
+    <div class="agent-review">
+      <div class="agent-review-header">
+        <h3>Agent 4 &mdash; The Communicator (Launch &amp; Adoption)</h3>
+        <span class="score-pill score-green">9.5 / 10</span>
+      </div>
+      <table>
+        <thead><tr><th>Dimension</th><th>Score</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Overall</strong></td><td><strong>9.5/10</strong></td><td>An operations manual, not just a strategy deck</td></tr>
+          <tr><td>Completeness</td><td>10/10</td><td>All 8 sections fully addressed with actual copy</td></tr>
+          <tr><td>Quality</td><td>9.5/10</td><td>Ready-to-use emails, social posts, barista scripts, cheat sheets</td></tr>
+          <tr><td>Alignment</td><td>9/10</td><td>Perfect sync with Coder's deployment phases</td></tr>
+          <tr><td>Handoff</td><td>9/10</td><td>Immediately executable; production work specified</td></tr>
+        </tbody>
+      </table>
+      <h4>Strengths</h4>
+      <ol>
+        <li>Actual copy delivered: 3 email templates, social media posts, barista cheat sheet, POS scripts</li>
+        <li>Crisis management plan with 10 anticipated complaints and pre-written response templates</li>
+        <li>ROI modelling: breakeven requires just 5,400 incremental visits</li>
+      </ol>
+      <p><strong>How Well It Connected:</strong> The Communicator successfully translated the Coder's technical rollout into a human rollout. Week-by-week content calendar aligns precisely with the feature flag schedule.</p>
+    </div>
+
+    <!-- Pipeline Summary -->
+    <div class="callout callout-purple">
+      <div class="callout-label">Pipeline Performance Summary</div>
+      <table>
+        <thead><tr><th>Agent</th><th>Score</th><th>Recommendation</th></tr></thead>
+        <tbody>
+          <tr><td>Researcher</td><td>7.5/10</td><td>Conditional GO (gaps filled by Manager)</td></tr>
+          <tr><td>Designer</td><td>9.0/10</td><td>Conditional GO (technical validation needed)</td></tr>
+          <tr><td>Coder</td><td>9.5/10</td><td>GO</td></tr>
+          <tr><td>Communicator</td><td>9.5/10</td><td>Conditional GO (GDPR consent audit needed)</td></tr>
+          <tr><td><strong>Pipeline Average</strong></td><td><strong>8.9/10</strong></td><td><strong>GO with conditions</strong></td></tr>
+        </tbody>
+      </table>
+      <p style="margin-bottom:0;">The pipeline demonstrated strong sequential coherence: each agent built effectively on the previous agent's output, with the Manager's inter-stage reviews adding guardrails where needed.</p>
+    </div>
+  </section>
+
+  <!-- 3. SOLUTION OVERVIEW -->
+  <section id="solution">
+    <h2 class="section-title">3. Consolidated Solution Overview</h2>
+
+    <h3>The NorthSouth Roast Rewards Programme</h3>
+    <p><strong>In one sentence:</strong> NorthSouth Roast Rewards replaces a broken one-and-done coupon system with a behaviourally-designed engagement engine that delivers visible rewards on every visit, personalised communications that customers actually want to receive, and gamification mechanics that make earning coffee rewards genuinely enjoyable.</p>
+
+    <h3>How the Four Agents' Work Fits Together</h3>
+    <div class="pipeline-diagram">RESEARCHER identified      DESIGNER solved          CODER built            COMMUNICATOR launched
+the 5 root causes    &rarr;   each with a specific &rarr; the technical     &rarr;  the human rollout
+                           behavioural solution     infrastructure         strategy
+
+1. Points Desert     &rarr;   Milestone Ladder    &rarr;  Bean economy engine,   Re-engagement campaign
+                           (rewards at 3,5,8,       milestone tables,      for 100K lapsed users,
+                           12,20 visits)            progression API        "Beans" brand messaging
+
+2. Communication     &rarr;   Smart Lifecycle     &rarr;  Lifecycle service,     14 KPIs, A/B testing,
+   failure                 Messaging (5 stages,     message templates,     notification copy bank,
+                           behavioural triggers)    Celery scheduling      pivot decision framework
+
+3. No post-welcome   &rarr;   "Second Cup"        &rarr;  14-day trigger         In-app onboarding
+   onboarding              Onboarding Journey       sequence, Triple       sequence, day-by-day
+                           (14-day sequence)        Points bonus logic     messaging plan
+
+4. App lacks utility &rarr;   Personalised home   &rarr;  Store finder API,      In-store QR codes,
+                           screen, store finder,    menu database,         social media content,
+                           digital menu             recommendation API     PR strategy
+
+5. No gamification   &rarr;   Weekly Challenges,  &rarr;  Challenge engine,      Staff training (cheat
+                           Visit Streaks,           streak service,        sheets, scripts),
+                           Surprise Drops           probabilistic drops    crisis management plan</div>
+
+    <h3>Contradictions Resolved</h3>
+    <ol>
+      <li><strong>Budget allocation:</strong> The Designer allocated the full &euro;250,000 to technology phases. The Communicator allocated &euro;68,000 to communications. Resolution: the &euro;250,000 was always intended as total programme budget. The Coder's infrastructure (&euro;182,000 for development + &euro;1,200/month) plus the Communicator's &euro;68,000 fits within the total envelope.</li>
+      <li><strong>Deployment timeline vs. communication timeline:</strong> The Coder's Phase 1 starts in Week 1, but the Communicator's pre-launch communications start in Week 5. Resolution: this is correct &mdash; you build before you announce.</li>
+      <li><strong>Subscription model:</strong> The Researcher noted Pret's subscription success; the Manager explicitly excluded subscriptions from scope. Resolution: correct decision. The Milestone Ladder achieves similar frequency-driving effects through gamification rather than financial commitment.</li>
+    </ol>
+  </section>
+
+  <!-- 4. RISK ASSESSMENT -->
+  <section id="risks">
+    <h2 class="section-title">4. Risk Assessment</h2>
+    <table>
+      <thead><tr><th>#</th><th>Risk</th><th>Likelihood</th><th>Impact</th><th>Mitigation</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><strong>GDPR consent gap</strong> &mdash; lapsed users may lack valid marketing consent</td><td>High</td><td>High</td><td>Legal/DPO audit of consent records before launch. Fallback: re-permission campaign (adds 2 weeks).</td></tr>
+        <tr><td>2</td><td><strong>POS integration limitations</strong> &mdash; existing POS may not support item-level data</td><td>Medium</td><td>High</td><td>Week 1 technical spike. Fallback: simplify to visit-count-only triggers.</td></tr>
+        <tr><td>3</td><td><strong>App store review delays</strong> &mdash; iOS/Android updates may take 3-7 days</td><td>Medium</td><td>High</td><td>Submit Phase 1 by end of Week 2. Use server-side configuration for content.</td></tr>
+        <tr><td>4</td><td><strong>Staff training gap</strong> &mdash; 1,200+ staff across 120 locations</td><td>Medium</td><td>Medium</td><td>Cascade model: train 120 managers who train teams. Cheat sheet by every till.</td></tr>
+        <tr><td>5</td><td><strong>Reward cost escalation</strong></td><td>Low</td><td>High</td><td>Built-in headroom (&euro;0.85 actual vs. &euro;2.50 cap). Emergency levers available.</td></tr>
+        <tr><td>6</td><td><strong>Customer backlash on points migration</strong></td><td>Medium</td><td>Medium</td><td>1:1 conversion plus 25 bonus Beans. In-app modal explains the upgrade.</td></tr>
+        <tr><td>7</td><td><strong>Technical performance under load</strong></td><td>Low</td><td>High</td><td>Auto-scaling + Redis cache (sub-ms reads). Load testing in Week 2.</td></tr>
+        <tr><td>8</td><td><strong>Gamification fatigue</strong></td><td>Medium</td><td>Medium</td><td>Challenge catalogue refreshed monthly. Seasonal campaigns.</td></tr>
+        <tr><td>9</td><td><strong>Competitor response</strong></td><td>Medium</td><td>Low</td><td>8-week speed-to-market advantage. Designed for continuous iteration.</td></tr>
+        <tr><td>10</td><td><strong>Data infrastructure gaps</strong></td><td>Medium</td><td>Medium</td><td>Level 1 personalisation is rule-based. Level 2 is Phase 2 scope.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 5. RESOURCES -->
+  <section id="resources">
+    <h2 class="section-title">5. Resource Requirements</h2>
+
+    <h3>Budget Breakdown</h3>
+    <table>
+      <thead><tr><th>Category</th><th>Amount</th><th>%</th></tr></thead>
+      <tbody>
+        <tr><td colspan="3" style="color:var(--accent-light);font-weight:700;">Technology Development</td></tr>
+        <tr><td>Phase 1: Bean economy, lifecycle messaging, onboarding</td><td>&euro;90,000</td><td>36%</td></tr>
+        <tr><td>Phase 2: Gamification, personalisation, utility features</td><td>&euro;70,000</td><td>28%</td></tr>
+        <tr><td>Phase 3: Surprise drops, menu, analytics, polish</td><td>&euro;22,000</td><td>9%</td></tr>
+        <tr><td colspan="3" style="color:var(--accent-light);font-weight:700;">Communication &amp; Launch</td></tr>
+        <tr><td>Digital marketing (email, social, paid)</td><td>&euro;28,000</td><td>11%</td></tr>
+        <tr><td>In-store collateral (signage, print, cup sleeves)</td><td>&euro;12,000</td><td>5%</td></tr>
+        <tr><td>Staff training (video production, materials)</td><td>&euro;8,000</td><td>3%</td></tr>
+        <tr><td>PR and content creation</td><td>&euro;10,000</td><td>4%</td></tr>
+        <tr><td>Contingency</td><td>&euro;10,000</td><td>4%</td></tr>
+        <tr><td><strong>TOTAL</strong></td><td><strong>&euro;250,000</strong></td><td><strong>100%</strong></td></tr>
+      </tbody>
+    </table>
+
+    <h3>Team Required</h3>
+    <table>
+      <thead><tr><th>Role</th><th>FTE</th><th>Duration</th><th>Source</th></tr></thead>
+      <tbody>
+        <tr><td>Backend Engineers</td><td>2</td><td>8 weeks</td><td>Internal or contract</td></tr>
+        <tr><td>Mobile Developers (iOS + Android)</td><td>2</td><td>8 weeks</td><td>Internal or contract</td></tr>
+        <tr><td>UI/UX Designer</td><td>1</td><td>6 weeks</td><td>Internal or contract</td></tr>
+        <tr><td>QA Engineer</td><td>1</td><td>4 weeks</td><td>Internal or contract</td></tr>
+        <tr><td>Product Manager</td><td>1</td><td>8 weeks</td><td>Internal</td></tr>
+        <tr><td>Marketing/Comms Lead</td><td>1</td><td>10 weeks</td><td>Internal</td></tr>
+        <tr><td>Content Writer</td><td>1</td><td>6 weeks</td><td>Freelance</td></tr>
+        <tr><td>Data Analyst</td><td>0.5</td><td>8 weeks</td><td>Internal</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Timeline with Key Milestones</h3>
+    <table>
+      <thead><tr><th>Week</th><th>Milestone</th><th>Gate Criteria</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Technical spikes complete (POS, app, DB)</td><td>All 3 spikes validated</td></tr>
+        <tr><td>2</td><td>Phase 1 backend complete, app update submitted</td><td>Bean economy functional in staging</td></tr>
+        <tr><td>3</td><td><strong>PHASE 1 LAUNCH</strong> &mdash; Milestone Ladder live</td><td>Feature flags at 100%, monitoring green</td></tr>
+        <tr><td>4</td><td>Phase 2 backend complete (challenges, streaks)</td><td>Unit tests passing, staging validated</td></tr>
+        <tr><td>5</td><td>Staff training begins (store managers first)</td><td>Training video produced, cheat sheets printed</td></tr>
+        <tr><td>6</td><td><strong>PHASE 2 LAUNCH</strong> &mdash; Gamification live</td><td>Challenges and streaks at 100%</td></tr>
+        <tr><td>7</td><td>Phase 3 features complete (drops, menu)</td><td>Full QA pass complete</td></tr>
+        <tr><td>8</td><td><strong>PHASE 3 LAUNCH</strong> &mdash; Full programme live</td><td>All features at 100%, analytics live</td></tr>
+        <tr><td>12</td><td>30-day post-launch review</td><td>MAU trending toward 62K</td></tr>
+        <tr><td>20</td><td>90-day post-launch review</td><td>MAU at 72K, redemption at 28%</td></tr>
+        <tr><td>32</td><td>6-month review</td><td>All objectives achieved</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 6. GOVERNANCE -->
+  <section id="governance">
+    <h2 class="section-title">6. Governance &amp; Decision Framework</h2>
+
+    <h3>Programme Governance Structure</h3>
+    <table>
+      <thead><tr><th>Role</th><th>Person/Team</th><th>Responsibility</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Executive Sponsor</strong></td><td>CEO or COO</td><td>Final budget approval, strategic direction</td></tr>
+        <tr><td><strong>Programme Lead</strong></td><td>Product Manager</td><td>Day-to-day execution, cross-team coordination</td></tr>
+        <tr><td><strong>Technical Lead</strong></td><td>Senior Engineer</td><td>Architecture decisions, deployment approvals</td></tr>
+        <tr><td><strong>Marketing Lead</strong></td><td>Comms/Marketing Head</td><td>Communication execution, brand alignment</td></tr>
+        <tr><td><strong>Operations Lead</strong></td><td>Head of Retail</td><td>Staff training, in-store execution</td></tr>
+        <tr><td><strong>Data Lead</strong></td><td>Data Analyst</td><td>KPI tracking, reporting, A/B test analysis</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Phase Gate Criteria</h3>
+    <table>
+      <thead><tr><th>Gate</th><th>Timing</th><th>GO Criteria</th><th>NO-GO Actions</th></tr></thead>
+      <tbody>
+        <tr><td>Phase 1 &rarr; 2</td><td>End of Week 3</td><td>Bean economy stable, no critical bugs, lifecycle messaging operational</td><td>Fix critical issues; delay Phase 2 by 1 week max</td></tr>
+        <tr><td>Phase 2 &rarr; 3</td><td>End of Week 6</td><td>Challenges and streaks functional, no data integrity issues</td><td>Simplify Phase 3 scope; focus on stability</td></tr>
+        <tr><td>Full Launch</td><td>End of Week 8</td><td>All features stable, analytics operational, staff trained</td><td>Soft launch (flags at 50%) until resolved</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Escalation Path</h3>
+    <table>
+      <thead><tr><th>Level</th><th>Trigger</th><th>Who Decides</th><th>Response Time</th></tr></thead>
+      <tbody>
+        <tr><td>1 &mdash; Operational</td><td>Bug or minor issue</td><td>Programme Lead</td><td>4 hours</td></tr>
+        <tr><td>2 &mdash; Significant</td><td>Feature rollback needed</td><td>Technical + Programme Lead</td><td>2 hours</td></tr>
+        <tr><td>3 &mdash; Critical</td><td>System outage, data breach, major customer impact</td><td>Exec Sponsor + all leads</td><td>30 minutes</td></tr>
+        <tr><td>4 &mdash; Strategic</td><td>Budget overrun &gt;10%, timeline slip &gt;2 weeks</td><td>Board</td><td>48 hours</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 7. RECOMMENDATIONS -->
+  <section id="recommendations">
+    <h2 class="section-title">7. Recommendations to the Board</h2>
+
+    <div class="reco-card">
+      <h3>Recommendation 1: Approve and Begin Immediately</h3>
+      <p><strong>What:</strong> Approve the full &euro;250,000 programme budget and authorise the 8-week build starting within 5 business days.</p>
+      <p><strong>Why:</strong> Every week of delay costs approximately &euro;66,000 in lost incremental revenue. The programme's 40% MAU decline is accelerating &mdash; at current trajectory, MAU could fall below 30,000 within 3-4 months.</p>
+    </div>
+
+    <div class="reco-card">
+      <h3>Recommendation 2: Commission GDPR Consent Audit Immediately</h3>
+      <p><strong>What:</strong> Direct the Data Protection Officer to audit marketing consent records for all 310,000 registered members within 10 business days.</p>
+      <p><strong>Why:</strong> The re-engagement campaign targeting 100,000+ lapsed users is the highest-impact single initiative. If consent records are invalid, a re-permission campaign must run first, adding 2 weeks.</p>
+    </div>
+
+    <div class="reco-card">
+      <h3>Recommendation 3: Hire/Contract Two Additional Engineers</h3>
+      <p><strong>What:</strong> Bring on two contract backend engineers for the 8-week build. Budget: approximately &euro;40,000-50,000 from the technology allocation.</p>
+      <p><strong>Why:</strong> The technical scope (15+ tables, 25+ endpoints, 7 services) is ambitious for 8 weeks. Additional engineers provide redundancy and reduce single-point-of-failure risk.</p>
+    </div>
+
+    <div class="reco-card">
+      <h3>Recommendation 4: Set Up Real-Time KPI Dashboard in Week 1</h3>
+      <p><strong>What:</strong> Prioritise the analytics dashboard as a Week 1 deliverable (basic version), not Phase 3.</p>
+      <p><strong>Why:</strong> "You can't improve what you can't measure" is especially true for a programme recovering from a 40% decline.</p>
+    </div>
+
+    <div class="reco-card">
+      <h3>Recommendation 5: Plan for Continuous Iteration</h3>
+      <p><strong>What:</strong> Allocate &euro;5,000-8,000/month post-launch for ongoing optimisation: new challenges, seasonal campaigns, A/B testing, and feature refinement.</p>
+      <p><strong>Why:</strong> The risk of launching and then neglecting the programme is precisely what caused the original failure.</p>
+    </div>
+
+    <h3>Contingency: What If We're Behind Target?</h3>
+    <table>
+      <thead><tr><th>Timeframe</th><th>Trigger</th><th>Action</th></tr></thead>
+      <tbody>
+        <tr><td><strong>30 days</strong></td><td>MAU below 52,000</td><td>Accelerate re-engagement; increase reactivation bonus to 100 Beans; A/B test notification copy</td></tr>
+        <tr><td><strong>30 days</strong></td><td>Redemption &lt; 15%</td><td>Lower "First Steps" from 50 to 40 Beans; add quick-win reward at 25 Beans</td></tr>
+        <tr><td><strong>60 days</strong></td><td>MAU below 55,000</td><td>Commission customer research; consider mobile ordering; increase paid social by &euro;5,000</td></tr>
+        <tr><td><strong>60 days</strong></td><td>Challenge participation &lt; 20%</td><td>Refresh catalogue; simplify mechanics; add higher-value rewards</td></tr>
+        <tr><td><strong>90 days</strong></td><td>MAU below 65,000</td><td>Full programme review; consider structural changes; escalate to Board</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 8. NEXT STEPS -->
+  <section id="next-steps">
+    <h2 class="section-title">8. Next Steps</h2>
+
+    <h3>Immediate Actions (Next 48 Hours)</h3>
+    <ol>
+      <li><strong>Board approval</strong> of &euro;250,000 budget and 8-week timeline</li>
+      <li><strong>Commission GDPR consent audit</strong> via Data Protection Officer</li>
+      <li><strong>Brief the technology team</strong> on programme scope and architecture</li>
+      <li><strong>Post contract roles</strong> for 2 additional backend engineers</li>
+      <li><strong>Notify app store developer accounts</strong> of upcoming update submissions</li>
+    </ol>
+
+    <h3>Week 1 Priorities</h3>
+    <table>
+      <thead><tr><th>Priority</th><th>Owner</th><th>Deliverable</th></tr></thead>
+      <tbody>
+        <tr><td>POS integration audit</td><td>Technical Lead</td><td>Confirmed data capabilities</td></tr>
+        <tr><td>App framework validation</td><td>Mobile Developers</td><td>Animation/interaction support confirmed</td></tr>
+        <tr><td>Database migration plan</td><td>Backend Engineers</td><td>Alembic migration scripts written</td></tr>
+        <tr><td>Push notification audit</td><td>Technical Lead</td><td>Infrastructure capabilities confirmed</td></tr>
+        <tr><td>Communication brief to agency</td><td>Marketing Lead</td><td>Email templates into HTML production</td></tr>
+        <tr><td>Staff training video brief</td><td>Marketing Lead</td><td>Production brief issued, filming scheduled</td></tr>
+        <tr><td>Basic analytics dashboard</td><td>Data Analyst</td><td>MAU + core metrics trackable</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout-green" style="margin-top:32px;">
+      <div class="callout-label">Final Statement</div>
+      <p>This programme is not a cosmetic refresh. It is a fundamental redesign of how NorthSouth Coffee builds customer relationships. The four-agent pipeline has produced a solution that is <strong>behaviourally grounded</strong>, <strong>technically sound</strong>, <strong>financially disciplined</strong>, and <strong>operationally executable</strong>.</p>
+      <p><strong>The cost of inaction is clear:</strong> at the current decline rate, NorthSouth's loyalty programme will be functionally dead within 6 months. The cost of action is &euro;250,000 against projected incremental revenue of &euro;264,600 per month at target.</p>
+      <p style="margin-bottom:0;font-size:18px;font-weight:700;color:#fff;">The recommendation is unanimous across all agents: proceed immediately.</p>
+    </div>
+  </section>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <p><em>End of Final Executive Report</em></p>
+  <p>Prepared by Agent 5 &mdash; The Manager (Oversight &amp; Coordination)<br>For the NorthSouth Coffee Board of Directors<br>10 February 2026</p>
+  <p style="margin-top:16px;">Built with <strong>Claude (Anthropic)</strong> &mdash; 5 specialised AI agents working as a team<br>
+  <a href="index.html">View Interactive Demo &rarr;</a></p>
+</div>
+
+</body>
+</html>
