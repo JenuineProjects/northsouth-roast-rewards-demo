@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NorthSouth Roast Rewards - Interactive Prototype</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1a1a2e;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 20px;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        /* ── INFO PANEL (left) ──────────────────────────────── */
+        .info-panel {
+            width: 380px;
+            background: #16213e;
+            border-radius: 16px;
+            padding: 30px;
+            color: #e0e0e0;
+            position: sticky;
+            top: 20px;
+        }
+        .info-panel h1 {
+            font-size: 22px;
+            color: #4a907a;
+            margin-bottom: 8px;
+        }
+        .info-panel h2 {
+            font-size: 16px;
+            color: #ccc;
+            font-weight: 400;
+            margin-bottom: 20px;
+        }
+        .info-panel p {
+            font-size: 13px;
+            line-height: 1.6;
+            color: #aaa;
+            margin-bottom: 12px;
+        }
+        .info-panel .feature-tag {
+            display: inline-block;
+            background: #4a907a33;
+            color: #4a907a;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            margin: 3px 4px 3px 0;
+        }
+        .info-panel .instructions {
+            background: #1a1a2e;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+        .info-panel .instructions h3 {
+            font-size: 13px;
+            color: #4a907a;
+            margin-bottom: 8px;
+        }
+        .info-panel .instructions li {
+            font-size: 12px;
+            color: #aaa;
+            margin-bottom: 5px;
+            margin-left: 15px;
+        }
+
+        /* ── PHONE FRAME ────────────────────────────────────── */
+        .phone-frame {
+            width: 375px;
+            height: 812px;
+            background: #000;
+            border-radius: 44px;
+            padding: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            position: relative;
+        }
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            background: #faf8f5;
+            border-radius: 34px;
+            overflow: hidden;
+            position: relative;
+        }
+        .phone-notch {
+            width: 150px;
+            height: 30px;
+            background: #000;
+            border-radius: 0 0 18px 18px;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+        }
+
+        /* ── STATUS BAR ─────────────────────────────────────── */
+        .status-bar {
+            height: 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding: 0 25px 6px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #1b3a4b;
+        }
+
+        /* ── HEADER ─────────────────────────────────────────── */
+        .app-header {
+            background: #1b3a4b;
+            color: white;
+            padding: 16px 20px 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .app-header .logo {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        .app-header .logo span { color: #4a907a; }
+        .app-header .beans-badge {
+            background: #4a907a;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .app-header .beans-badge:hover { transform: scale(1.05); }
+        .app-header .beans-badge .bean-icon { margin-right: 4px; }
+
+        /* ── SCROLLABLE CONTENT ─────────────────────────────── */
+        .scroll-content {
+            height: calc(100% - 48px - 54px - 70px);
+            overflow-y: auto;
+            scroll-behavior: smooth;
+        }
+        .scroll-content::-webkit-scrollbar { width: 0; }
+
+        /* ── SCREENS ────────────────────────────────────────── */
+        .screen { display: none; }
+        .screen.active { display: block; }
+
+        /* ── HOME SCREEN ────────────────────────────────────── */
+        .greeting {
+            padding: 18px 20px 8px;
+            font-size: 22px;
+            font-weight: 700;
+            color: #1b3a4b;
+        }
+        .greeting span { color: #4a907a; }
+
+        /* Milestone Progress Card */
+        .progress-card {
+            margin: 12px 16px;
+            background: linear-gradient(135deg, #1b3a4b, #2d6a5a);
+            border-radius: 16px;
+            padding: 20px;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .progress-card:hover { transform: translateY(-2px); }
+        .progress-card .milestone-label {
+            font-size: 12px;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .progress-card .milestone-name {
+            font-size: 20px;
+            font-weight: 700;
+            margin: 4px 0 12px;
+        }
+        .progress-bar-bg {
+            height: 10px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background: #4a907a;
+            border-radius: 5px;
+            transition: width 1s ease;
+        }
+        .progress-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        /* Streak Card */
+        .streak-card {
+            margin: 0 16px 12px;
+            background: white;
+            border-radius: 14px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .streak-card:hover { transform: translateY(-1px); }
+        .streak-flame {
+            font-size: 36px;
+            line-height: 1;
+        }
+        .streak-info h3 {
+            font-size: 15px;
+            color: #1b3a4b;
+            font-weight: 700;
+        }
+        .streak-info p {
+            font-size: 12px;
+            color: #888;
+            margin-top: 2px;
+        }
+        .streak-shield {
+            margin-left: auto;
+            background: #4a907a22;
+            color: #4a907a;
+            padding: 4px 10px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        /* Section headers */
+        .section-header {
+            padding: 16px 20px 8px;
+            font-size: 16px;
+            font-weight: 700;
+            color: #1b3a4b;
+        }
+
+        /* Challenge Cards */
+        .challenge-card {
+            margin: 0 16px 10px;
+            background: white;
+            border-radius: 14px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            cursor: pointer;
+            transition: all 0.3s;
+            border-left: 4px solid #4a907a;
+        }
+        .challenge-card:hover { transform: translateY(-1px); }
+        .challenge-card.accepted { border-left-color: #f59e0b; background: #fffbeb; }
+        .challenge-card.completed { border-left-color: #10b981; background: #ecfdf5; }
+        .challenge-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .challenge-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1b3a4b;
+        }
+        .challenge-beans {
+            background: #4a907a22;
+            color: #4a907a;
+            padding: 3px 8px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        .challenge-desc {
+            font-size: 12px;
+            color: #666;
+            margin: 6px 0;
+        }
+        .challenge-progress {
+            height: 6px;
+            background: #e5e7eb;
+            border-radius: 3px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+        .challenge-progress-fill {
+            height: 100%;
+            background: #4a907a;
+            border-radius: 3px;
+            transition: width 0.5s;
+        }
+        .challenge-status {
+            font-size: 11px;
+            color: #888;
+            margin-top: 4px;
+        }
+
+        /* Daily Recommendation */
+        .reco-card {
+            margin: 0 16px 12px;
+            background: linear-gradient(135deg, #f5f0eb, #e8ddd4);
+            border-radius: 14px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .reco-icon { font-size: 32px; }
+        .reco-text h4 {
+            font-size: 13px;
+            color: #1b3a4b;
+            font-weight: 700;
+        }
+        .reco-text p {
+            font-size: 12px;
+            color: #666;
+            margin-top: 2px;
+        }
+
+        /* Community counter */
+        .community-counter {
+            text-align: center;
+            padding: 16px;
+            font-size: 12px;
+            color: #999;
+        }
+
+        /* ── MILESTONES SCREEN ──────────────────────────────── */
+        .milestone-ladder {
+            padding: 20px 16px;
+        }
+        .milestone-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            margin-bottom: 24px;
+            position: relative;
+        }
+        .milestone-item::before {
+            content: '';
+            position: absolute;
+            left: 19px;
+            top: 40px;
+            width: 2px;
+            height: calc(100% + 4px);
+            background: #e0e0e0;
+        }
+        .milestone-item:last-child::before { display: none; }
+        .milestone-item.achieved::before { background: #4a907a; }
+        .milestone-dot {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+            z-index: 1;
+        }
+        .milestone-item.achieved .milestone-dot {
+            background: #4a907a;
+        }
+        .milestone-item.current .milestone-dot {
+            background: #1b3a4b;
+            box-shadow: 0 0 0 4px #4a907a44;
+        }
+        .milestone-item.future .milestone-dot { background: #ddd; }
+        .milestone-details {
+            flex: 1;
+            background: white;
+            border-radius: 12px;
+            padding: 14px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+        .milestone-item.current .milestone-details {
+            border: 2px solid #4a907a;
+        }
+        .milestone-details h4 {
+            font-size: 15px;
+            color: #1b3a4b;
+            font-weight: 700;
+        }
+        .milestone-details .reward-text {
+            font-size: 12px;
+            color: #666;
+            margin: 4px 0;
+        }
+        .milestone-details .beans-needed {
+            font-size: 11px;
+            color: #4a907a;
+            font-weight: 600;
+        }
+        .redeem-btn {
+            margin-top: 8px;
+            background: #4a907a;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .redeem-btn:hover { background: #3d7a67; }
+
+        /* ── SURPRISE DROP OVERLAY ──────────────────────────── */
+        .surprise-overlay {
+            display: none;
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 200;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            animation: fadeIn 0.3s;
+        }
+        .surprise-overlay.show { display: flex; }
+        .surprise-content {
+            background: white;
+            border-radius: 24px;
+            padding: 30px;
+            text-align: center;
+            margin: 20px;
+            animation: popIn 0.4s ease;
+            max-width: 300px;
+        }
+        .surprise-emoji { font-size: 60px; margin-bottom: 12px; }
+        .surprise-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: #1b3a4b;
+            margin-bottom: 8px;
+        }
+        .surprise-desc {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+        .surprise-btn {
+            background: #4a907a;
+            color: white;
+            border: none;
+            padding: 12px 32px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .surprise-btn:hover { transform: scale(1.05); }
+
+        /* ── STORE FINDER ───────────────────────────────────── */
+        .store-list { padding: 0 16px; }
+        .store-item {
+            background: white;
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .store-name { font-size: 14px; font-weight: 700; color: #1b3a4b; }
+        .store-addr { font-size: 12px; color: #888; margin-top: 2px; }
+        .store-status {
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .store-status.quiet { background: #ecfdf5; color: #10b981; }
+        .store-status.moderate { background: #fffbeb; color: #f59e0b; }
+        .store-status.busy { background: #fef2f2; color: #ef4444; }
+
+        /* ── MENU SCREEN ────────────────────────────────────── */
+        .menu-grid { padding: 0 16px; }
+        .menu-item {
+            background: white;
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .menu-item:hover { transform: translateY(-1px); }
+        .menu-item-info h4 { font-size: 14px; color: #1b3a4b; font-weight: 700; }
+        .menu-item-info p { font-size: 12px; color: #888; margin-top: 2px; }
+        .menu-item-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .menu-price { font-size: 14px; font-weight: 700; color: #1b3a4b; }
+        .heart-btn {
+            font-size: 20px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            background: none;
+            border: none;
+        }
+        .heart-btn:hover { transform: scale(1.2); }
+        .popular-badge {
+            background: #4a907a22;
+            color: #4a907a;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        /* ── BOTTOM NAV ─────────────────────────────────────── */
+        .bottom-nav {
+            height: 70px;
+            background: white;
+            border-top: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            padding-bottom: 10px;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            cursor: pointer;
+            padding: 6px 12px;
+            border-radius: 10px;
+            transition: all 0.2s;
+        }
+        .nav-item:hover { background: #f0f0f0; }
+        .nav-item.active { color: #4a907a; }
+        .nav-item.active .nav-icon { background: #4a907a22; }
+        .nav-icon {
+            font-size: 20px;
+            width: 36px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+        }
+        .nav-label { font-size: 10px; font-weight: 600; color: inherit; }
+
+        /* ── SIMULATE BUTTON ────────────────────────────────── */
+        .sim-btn {
+            display: block;
+            width: calc(100% - 32px);
+            margin: 12px 16px;
+            padding: 14px;
+            background: #1b3a4b;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        .sim-btn:hover { background: #2d6a5a; transform: translateY(-1px); }
+        .sim-btn.purchase { background: #4a907a; }
+        .sim-btn.purchase:hover { background: #3d7a67; }
+
+        /* ── ANIMATIONS ─────────────────────────────────────── */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        @keyframes beanShower {
+            0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100px) rotate(360deg); opacity: 0; }
+        }
+        .bean-particle {
+            position: absolute;
+            font-size: 20px;
+            animation: beanShower 1s ease-out forwards;
+            z-index: 300;
+            pointer-events: none;
+        }
+
+        /* ── TOAST NOTIFICATION ─────────────────────────────── */
+        .toast {
+            display: none;
+            position: absolute;
+            top: 60px;
+            left: 16px;
+            right: 16px;
+            background: #1b3a4b;
+            color: white;
+            padding: 14px 18px;
+            border-radius: 12px;
+            font-size: 13px;
+            z-index: 150;
+            animation: fadeIn 0.3s;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+        }
+        .toast.show { display: block; }
+        .toast-title { font-weight: 700; margin-bottom: 3px; }
+        .toast-body { opacity: 0.85; font-size: 12px; }
+    </style>
+</head>
+<body>
+
+<!-- ── INFO PANEL ──────────────────────────────────────────── -->
+<div class="info-panel">
+    <h1>NorthSouth Roast Rewards</h1>
+    <h2>Interactive Prototype / Demo</h2>
+    <p>
+        This prototype demonstrates the redesigned loyalty programme created by the
+        5-agent AI workflow. All features shown were designed by Agent 2 (Designer),
+        built by Agent 3 (Coder), and launched by Agent 4 (Communicator).
+    </p>
+    <div>
+        <span class="feature-tag">Milestone Ladder</span>
+        <span class="feature-tag">Bean Economy</span>
+        <span class="feature-tag">Visit Streaks</span>
+        <span class="feature-tag">Weekly Challenges</span>
+        <span class="feature-tag">Surprise Drops</span>
+        <span class="feature-tag">Store Finder</span>
+        <span class="feature-tag">Digital Menu</span>
+        <span class="feature-tag">Lifecycle Messaging</span>
+    </div>
+    <div class="instructions">
+        <h3>How to Use This Demo</h3>
+        <ol>
+            <li>Click <strong>"Simulate a Purchase"</strong> to earn Beans</li>
+            <li>Watch the <strong>progress bar</strong> fill toward the next milestone</li>
+            <li>Accept and complete <strong>challenges</strong> for bonus Beans</li>
+            <li>Keep purchasing to trigger a <strong>Surprise Drop</strong> (~1 in 4 for demo)</li>
+            <li>Navigate between screens using the <strong>bottom tabs</strong></li>
+            <li>Try the <strong>Milestones</strong> tab to see the full ladder</li>
+            <li>Explore <strong>Stores</strong> and <strong>Menu</strong> screens</li>
+        </ol>
+    </div>
+    <div class="instructions" style="margin-top:10px;">
+        <h3>Behavioural Principles in Action</h3>
+        <ol>
+            <li><strong>Endowed Progress</strong> — progress bar starts partially filled</li>
+            <li><strong>Goal Gradient</strong> — milestones get closer as you progress</li>
+            <li><strong>Loss Aversion</strong> — streak counter creates fear of breaking</li>
+            <li><strong>Variable Reinforcement</strong> — random Surprise Drops</li>
+            <li><strong>Zeigarnik Effect</strong> — incomplete progress nags you to return</li>
+        </ol>
+    </div>
+</div>
+
+<!-- ── PHONE ───────────────────────────────────────────────── -->
+<div class="phone-frame">
+    <div class="phone-screen">
+        <div class="phone-notch"></div>
+
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <span>9:41</span>
+            <span>5G</span>
+        </div>
+
+        <!-- Header -->
+        <div class="app-header">
+            <div class="logo">North<span>South</span> Coffee</div>
+            <div class="beans-badge" onclick="showToast('Bean Balance', beanBalance + ' Beans earned so far!')">
+                <span class="bean-icon">&#9749;</span>
+                <span id="header-beans">87</span> Beans
+            </div>
+        </div>
+
+        <!-- Scrollable Content -->
+        <div class="scroll-content">
+
+            <!-- ── HOME SCREEN ──────────────────────────── -->
+            <div class="screen active" id="screen-home">
+                <div class="greeting">Good morning, <span>Sarah</span></div>
+
+                <!-- Milestone Progress -->
+                <div class="progress-card" onclick="switchScreen('milestones')">
+                    <div class="milestone-label">Next Milestone</div>
+                    <div class="milestone-name" id="next-milestone-name">Getting Warmer</div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" id="progress-fill" style="width: 72.5%"></div>
+                    </div>
+                    <div class="progress-stats">
+                        <span id="progress-beans">87 / 120 Beans</span>
+                        <span id="progress-pct">72.5%</span>
+                    </div>
+                </div>
+
+                <!-- Streak -->
+                <div class="streak-card">
+                    <div class="streak-flame">&#128293;</div>
+                    <div class="streak-info">
+                        <h3 id="streak-text">4-week streak!</h3>
+                        <p>Visit this week to keep it going</p>
+                    </div>
+                    <div class="streak-shield" id="streak-shield">&#128737; Shield x1</div>
+                </div>
+
+                <!-- Simulate Purchase Button -->
+                <button class="sim-btn purchase" onclick="simulatePurchase()">
+                    &#9749; Simulate a Purchase (£4.20)
+                </button>
+
+                <!-- Challenges -->
+                <div class="section-header">This Week's Challenges</div>
+
+                <div class="challenge-card" id="challenge-1" onclick="acceptChallenge(1)">
+                    <div class="challenge-header">
+                        <span class="challenge-name">&#127775; Three-peat</span>
+                        <span class="challenge-beans">+40 Beans</span>
+                    </div>
+                    <div class="challenge-desc">Visit 3 times this week</div>
+                    <div class="challenge-progress">
+                        <div class="challenge-progress-fill" id="c1-progress" style="width: 0%"></div>
+                    </div>
+                    <div class="challenge-status" id="c1-status">Tap to accept</div>
+                </div>
+
+                <div class="challenge-card" id="challenge-2" onclick="acceptChallenge(2)">
+                    <div class="challenge-header">
+                        <span class="challenge-name">&#127807; Eco Warrior</span>
+                        <span class="challenge-beans">+50 Beans</span>
+                    </div>
+                    <div class="challenge-desc">Bring a reusable cup 3 times</div>
+                    <div class="challenge-progress">
+                        <div class="challenge-progress-fill" id="c2-progress" style="width: 0%"></div>
+                    </div>
+                    <div class="challenge-status" id="c2-status">Tap to accept</div>
+                </div>
+
+                <!-- Daily Recommendation -->
+                <div class="section-header">Today's Pick</div>
+                <div class="reco-card">
+                    <div class="reco-icon">&#9749;</div>
+                    <div class="reco-text">
+                        <h4>Spiced Oat Latte</h4>
+                        <p>It's a chilly morning — warm up with our winter favourite</p>
+                    </div>
+                </div>
+
+                <!-- Community Counter -->
+                <div class="community-counter">
+                    &#127881; <span id="community-count">1,247</span> rewards earned by NorthSouth customers today
+                </div>
+            </div>
+
+            <!-- ── MILESTONES SCREEN ────────────────────── -->
+            <div class="screen" id="screen-milestones">
+                <div class="section-header" style="padding-top:20px">Your Roast Rewards Journey</div>
+                <div style="padding: 0 20px 4px; font-size:12px; color:#888;">Journey #1</div>
+                <div class="milestone-ladder" id="milestone-ladder">
+                    <!-- Generated by JS -->
+                </div>
+            </div>
+
+            <!-- ── STORES SCREEN ────────────────────────── -->
+            <div class="screen" id="screen-stores">
+                <div class="section-header" style="padding-top:20px">NorthSouth Near You</div>
+                <div class="store-list">
+                    <div class="store-item">
+                        <div>
+                            <div class="store-name">NorthSouth Grafton St</div>
+                            <div class="store-addr">42 Grafton Street, Dublin 2 &bull; 0.3 km</div>
+                        </div>
+                        <div class="store-status quiet">Quiet</div>
+                    </div>
+                    <div class="store-item">
+                        <div>
+                            <div class="store-name">NorthSouth Temple Bar</div>
+                            <div class="store-addr">15 Temple Lane, Dublin 2 &bull; 0.7 km</div>
+                        </div>
+                        <div class="store-status moderate">Moderate</div>
+                    </div>
+                    <div class="store-item">
+                        <div>
+                            <div class="store-name">NorthSouth Ranelagh</div>
+                            <div class="store-addr">88 Ranelagh Road, Dublin 6 &bull; 2.1 km</div>
+                        </div>
+                        <div class="store-status quiet">Quiet</div>
+                    </div>
+                    <div class="store-item">
+                        <div>
+                            <div class="store-name">NorthSouth Dundrum</div>
+                            <div class="store-addr">Dundrum Town Centre, Dublin 16 &bull; 5.4 km</div>
+                        </div>
+                        <div class="store-status busy">Busy</div>
+                    </div>
+                    <div class="store-item">
+                        <div>
+                            <div class="store-name">NorthSouth Dun Laoghaire</div>
+                            <div class="store-addr">12 George's Street, Dun Laoghaire &bull; 8.2 km</div>
+                        </div>
+                        <div class="store-status moderate">Moderate</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── MENU SCREEN ──────────────────────────── -->
+            <div class="screen" id="screen-menu">
+                <div class="section-header" style="padding-top:20px">Our Menu</div>
+                <div class="menu-grid" id="menu-grid">
+                    <!-- Generated by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Surprise Drop Overlay -->
+        <div class="surprise-overlay" id="surprise-overlay">
+            <div class="surprise-content">
+                <div class="surprise-emoji" id="surprise-emoji">&#127881;</div>
+                <div class="surprise-title" id="surprise-title">Surprise!</div>
+                <div class="surprise-desc" id="surprise-desc">You've won something!</div>
+                <button class="surprise-btn" onclick="closeSurprise()">Awesome!</button>
+            </div>
+        </div>
+
+        <!-- Toast Notification -->
+        <div class="toast" id="toast">
+            <div class="toast-title" id="toast-title"></div>
+            <div class="toast-body" id="toast-body"></div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <div class="nav-item active" onclick="switchScreen('home')" id="nav-home">
+                <div class="nav-icon">&#127968;</div>
+                <div class="nav-label">Home</div>
+            </div>
+            <div class="nav-item" onclick="switchScreen('milestones')" id="nav-milestones">
+                <div class="nav-icon">&#127942;</div>
+                <div class="nav-label">Milestones</div>
+            </div>
+            <div class="nav-item" onclick="switchScreen('stores')" id="nav-stores">
+                <div class="nav-icon">&#128205;</div>
+                <div class="nav-label">Stores</div>
+            </div>
+            <div class="nav-item" onclick="switchScreen('menu')" id="nav-menu">
+                <div class="nav-icon">&#128203;</div>
+                <div class="nav-label">Menu</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// ── STATE ────────────────────────────────────────────────────
+let beanBalance = 87;
+let streakWeeks = 4;
+let purchaseCount = 0;
+let challengeState = { 1: 'available', 2: 'available' };
+let challengeProgress = { 1: 0, 2: 0 };
+let favourites = new Set();
+
+const milestones = [
+    { name: 'Welcome', beans: 0, reward: 'Free welcome drink', icon: '&#127881;', achieved: true },
+    { name: 'First Steps', beans: 50, reward: 'Free flavour shot or milk upgrade', icon: '&#10024;', achieved: true },
+    { name: 'Getting Warmer', beans: 120, reward: 'Free pastry from selected range', icon: '&#127838;', achieved: false },
+    { name: 'Regular', beans: 250, reward: 'Free drink — any size, any type', icon: '&#9749;', achieved: false },
+    { name: 'Insider', beans: 400, reward: 'Free drink + pastry combo', icon: '&#11088;', achieved: false },
+    { name: 'Devoted', beans: 700, reward: "Barista's Pick surprise + prize draw", icon: '&#128142;', achieved: false },
+];
+
+const menuItems = [
+    { name: 'Flat White', desc: 'Double espresso, steamed milk', price: '3.80', cat: 'Hot', popular: true },
+    { name: 'Spiced Oat Latte', desc: 'Seasonal favourite with warming spices', price: '4.50', cat: 'Hot', popular: true },
+    { name: 'Americano', desc: 'Double espresso, hot water', price: '3.20', cat: 'Hot', popular: false },
+    { name: 'Cappuccino', desc: 'Espresso, steamed milk, foam', price: '3.80', cat: 'Hot', popular: false },
+    { name: 'Iced Matcha Latte', desc: 'Ceremonial matcha, oat milk, ice', price: '4.80', cat: 'Cold', popular: true },
+    { name: 'Cold Brew', desc: '12-hour slow-steeped, smooth finish', price: '3.90', cat: 'Cold', popular: false },
+    { name: 'Almond Croissant', desc: 'Flaky pastry, almond frangipane', price: '3.20', cat: 'Food', popular: true },
+    { name: 'Sourdough Toast & Avocado', desc: 'With chilli flakes & lime', price: '5.50', cat: 'Food', popular: false },
+    { name: 'Banana Bread', desc: 'Homemade, served warm', price: '3.00', cat: 'Food', popular: false },
+];
+
+const surpriseDrops = [
+    { emoji: '&#9749;', title: 'Bonus Beans!', desc: 'Lucky you! 25 bonus Beans just landed in your account.', beans: 25 },
+    { emoji: '&#127881;', title: 'Free Upgrade!', desc: "Today's on us — free upgrade to large on your next visit!", beans: 0 },
+    { emoji: '&#127775;', title: 'Mystery Reward!', desc: 'Scratch to reveal... Free flavour shot! Show this at the counter.', beans: 10 },
+    { emoji: '&#128150;', title: 'Barista Says...', desc: '"Great choice on the flat white!" + 10 bonus Beans', beans: 10 },
+];
+
+// ── FUNCTIONS ────────────────────────────────────────────────
+
+function updateUI() {
+    // Header beans
+    document.getElementById('header-beans').textContent = beanBalance;
+
+    // Find current milestone
+    let currentIdx = 0;
+    for (let i = milestones.length - 1; i >= 0; i--) {
+        if (beanBalance >= milestones[i].beans) {
+            milestones[i].achieved = true;
+            if (i < milestones.length - 1) currentIdx = i + 1;
+            else currentIdx = i;
+        }
+    }
+
+    const current = milestones[currentIdx];
+    const prev = currentIdx > 0 ? milestones[currentIdx - 1] : { beans: 0 };
+    const range = current.beans - prev.beans;
+    const progress = Math.min(100, ((beanBalance - prev.beans) / range) * 100);
+
+    // Progress card
+    document.getElementById('next-milestone-name').textContent =
+        beanBalance >= current.beans ? 'Milestone Reached!' : current.name;
+    document.getElementById('progress-fill').style.width = progress + '%';
+    document.getElementById('progress-beans').textContent = beanBalance + ' / ' + current.beans + ' Beans';
+    document.getElementById('progress-pct').textContent = progress.toFixed(1) + '%';
+
+    // Streak
+    document.getElementById('streak-text').textContent = streakWeeks + '-week streak!';
+
+    // Milestone ladder
+    renderMilestones(currentIdx);
+}
+
+function renderMilestones(currentIdx) {
+    const ladder = document.getElementById('milestone-ladder');
+    ladder.innerHTML = '';
+    milestones.forEach((ms, i) => {
+        const cls = ms.achieved ? 'achieved' : (i === currentIdx ? 'current' : 'future');
+        const dotContent = ms.achieved ? '&#10003;' : ms.icon;
+        let extra = '';
+        if (ms.achieved && i > 0 && i < currentIdx) {
+            extra = '<div style="font-size:11px;color:#4a907a;margin-top:4px;">&#10003; Redeemed</div>';
+        } else if (ms.achieved && i === currentIdx - 0 && beanBalance >= ms.beans && !milestones[currentIdx]?.achieved) {
+            // nothing
+        } else if (i === currentIdx && !ms.achieved) {
+            const remaining = ms.beans - beanBalance;
+            extra = `<div class="beans-needed">${remaining} Beans to go</div>`;
+        }
+        if (ms.achieved && i > 0) {
+            extra += '<button class="redeem-btn" onclick="showToast(\'Reward Redeemed!\', \'Enjoy your ' + ms.reward + '!\')">Redeem</button>';
+        }
+        ladder.innerHTML += `
+            <div class="milestone-item ${cls}">
+                <div class="milestone-dot">${dotContent}</div>
+                <div class="milestone-details">
+                    <h4>${ms.name}</h4>
+                    <div class="reward-text">${ms.reward}</div>
+                    <div class="beans-needed">${ms.beans} Beans</div>
+                    ${extra}
+                </div>
+            </div>
+        `;
+    });
+}
+
+function renderMenu() {
+    const grid = document.getElementById('menu-grid');
+    grid.innerHTML = '';
+    menuItems.forEach((item, i) => {
+        const isFav = favourites.has(i);
+        grid.innerHTML += `
+            <div class="menu-item">
+                <div class="menu-item-info">
+                    <h4>${item.name} ${item.popular ? '<span class="popular-badge">Popular</span>' : ''}</h4>
+                    <p>${item.desc}</p>
+                </div>
+                <div class="menu-item-right">
+                    <span class="menu-price">&pound;${item.price}</span>
+                    <button class="heart-btn" onclick="toggleFav(${i})">${isFav ? '&#10084;&#65039;' : '&#129293;'}</button>
+                </div>
+            </div>
+        `;
+    });
+}
+
+function toggleFav(idx) {
+    if (favourites.has(idx)) favourites.delete(idx);
+    else favourites.add(idx);
+    renderMenu();
+}
+
+function simulatePurchase() {
+    const earned = 42; // £4.20 * 10 beans/£
+    beanBalance += earned;
+    purchaseCount++;
+
+    showToast('Purchase Complete!', `+${earned} Beans earned &#9749;`);
+
+    // Update challenge progress
+    if (challengeState[1] === 'accepted') {
+        challengeProgress[1] = Math.min(3, challengeProgress[1] + 1);
+        document.getElementById('c1-progress').style.width = (challengeProgress[1] / 3 * 100) + '%';
+        document.getElementById('c1-status').textContent = challengeProgress[1] + ' of 3 visits';
+        if (challengeProgress[1] >= 3) {
+            challengeState[1] = 'completed';
+            beanBalance += 40;
+            document.getElementById('challenge-1').classList.remove('accepted');
+            document.getElementById('challenge-1').classList.add('completed');
+            document.getElementById('c1-status').textContent = 'Completed! +40 Beans';
+            setTimeout(() => showToast('Challenge Complete!', 'Three-peat done! +40 bonus Beans &#127775;'), 1500);
+        }
+    }
+
+    // Check milestones
+    milestones.forEach(ms => {
+        if (!ms.achieved && beanBalance >= ms.beans) {
+            ms.achieved = true;
+            setTimeout(() => showToast('Milestone Reached!', ms.name + ' unlocked! ' + ms.reward + ' &#127942;'), 2000);
+        }
+    });
+
+    // Surprise drop (1 in 4 for demo purposes)
+    if (Math.random() < 0.25) {
+        const drop = surpriseDrops[Math.floor(Math.random() * surpriseDrops.length)];
+        beanBalance += drop.beans;
+        setTimeout(() => showSurprise(drop), 2500);
+    }
+
+    // Bean shower animation
+    createBeanParticles();
+
+    updateUI();
+}
+
+function createBeanParticles() {
+    const screen = document.querySelector('.phone-screen');
+    for (let i = 0; i < 8; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'bean-particle';
+        particle.innerHTML = '&#9749;';
+        particle.style.left = (100 + Math.random() * 180) + 'px';
+        particle.style.top = (80 + Math.random() * 40) + 'px';
+        particle.style.animationDelay = (Math.random() * 0.5) + 's';
+        screen.appendChild(particle);
+        setTimeout(() => particle.remove(), 1500);
+    }
+}
+
+function acceptChallenge(num) {
+    if (challengeState[num] === 'available') {
+        challengeState[num] = 'accepted';
+        document.getElementById('challenge-' + num).classList.add('accepted');
+        document.getElementById('c' + num + '-status').textContent = '0 of 3 — Challenge accepted!';
+        showToast('Challenge Accepted!', 'Complete it by Sunday for bonus Beans!');
+    }
+}
+
+function showSurprise(drop) {
+    document.getElementById('surprise-emoji').innerHTML = drop.emoji;
+    document.getElementById('surprise-title').textContent = drop.title;
+    document.getElementById('surprise-desc').innerHTML = drop.desc;
+    document.getElementById('surprise-overlay').classList.add('show');
+}
+
+function closeSurprise() {
+    document.getElementById('surprise-overlay').classList.remove('show');
+    updateUI();
+}
+
+function showToast(title, body) {
+    const toast = document.getElementById('toast');
+    document.getElementById('toast-title').innerHTML = title;
+    document.getElementById('toast-body').innerHTML = body;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+function switchScreen(name) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen-' + name).classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('nav-' + name).classList.add('active');
+}
+
+// ── INIT ──────────────────────────────────────────────────────
+updateUI();
+renderMenu();
+
+// Simulate community counter incrementing
+setInterval(() => {
+    const el = document.getElementById('community-count');
+    let count = parseInt(el.textContent.replace(',', ''));
+    count += Math.floor(Math.random() * 3) + 1;
+    el.textContent = count.toLocaleString();
+}, 5000);
+</script>
+</body>
+</html>
